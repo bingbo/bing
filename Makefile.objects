@@ -1,0 +1,8 @@
+bing.lo: /Users/zhangbingbing/Work/github/bing/bing.c
+	$(LIBTOOL) --mode=compile $(CC) -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 -I. -I/Users/zhangbingbing/Work/github/bing $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS)  -c /Users/zhangbingbing/Work/github/bing/bing.c -o bing.lo 
+$(phplibdir)/bing.la: ./bing.la
+	$(LIBTOOL) --mode=install cp ./bing.la $(phplibdir)
+
+./bing.la: $(shared_objects_bing) $(BING_SHARED_DEPENDENCIES)
+	$(LIBTOOL) --mode=link $(CC) $(COMMON_FLAGS) $(CFLAGS_CLEAN) $(EXTRA_CFLAGS) $(LDFLAGS) -o $@ -export-dynamic -avoid-version -prefer-pic -module -rpath $(phplibdir) $(EXTRA_LDFLAGS) $(shared_objects_bing) $(BING_SHARED_LIBADD)
+
