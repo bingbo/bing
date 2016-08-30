@@ -11,13 +11,12 @@ dnl PHP_ARG_WITH(bing, for bing support,
 dnl Make sure that the comment is aligned:
 dnl [  --with-bing             Include bing support])
 
-dnl Otherwise use enable:使用--enable-bing进行编译安装
+dnl Otherwise use enable:
 
-PHP_ARG_ENABLE(bing, whether to enable bing support,
-Make sure that the comment is aligned:
-[  --enable-bing           Enable bing support])
+dnl PHP_ARG_ENABLE(bing, whether to enable bing support,
+dnl Make sure that the comment is aligned:
+dnl [  --enable-bing           Enable bing support])
 
-dnl 如果使用了./configure --enable-bing 则终端环境便会自动将$PHP_BING亦是设置为yes
 if test "$PHP_BING" != "no"; then
   dnl Write more examples of tests here...
 
@@ -60,6 +59,5 @@ if test "$PHP_BING" != "no"; then
   dnl
   dnl PHP_SUBST(BING_SHARED_LIBADD)
 
-  dnl PHP_NEW_EXTENSION函数声明了这个扩展的名称、需要的源文件名、此扩展的编译形式。如果我们的扩展使用了多个文件，便可以将这多个文件名罗列在函数的参数里
   PHP_NEW_EXTENSION(bing, bing.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 fi
