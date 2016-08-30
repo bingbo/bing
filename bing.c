@@ -27,6 +27,9 @@
 #include "php_ini.h"
 #include "ext/standard/info.h"
 #include "php_bing.h"
+#include "main/SAPI.h"
+#include "Zend/zend_alloc.h"
+#include "ext/standard/php_string.h"
 
 /* If you declare any globals in php_bing.h uncomment this:
 ZEND_DECLARE_MODULE_GLOBALS(bing)
@@ -83,9 +86,8 @@ static void php_bing_init_globals(zend_bing_globals *bing_globals)
  */
 PHP_MINIT_FUNCTION(bing)
 {
-	/* If you have INI entries, uncomment these lines
-	REGISTER_INI_ENTRIES();
-	*/
+//	REGISTER_INI_ENTRIES();
+    ZEND_MODULE_STARTUP_N(bing_service)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 /* }}} */
