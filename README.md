@@ -281,3 +281,107 @@ $obj->execute();
 #define ZEND_ARG_VARIADIC_INFO(pass_by_ref, name)                    { #name, NULL, 0, pass_by_ref, 0, 1 },
 ```
 
+### 数据类型相关宏
+
+```c
+/**在Zend/zend_types.h里定义*/
+/* regular data types */
+#define IS_UNDEF					0
+#define IS_NULL						1
+#define IS_FALSE					2
+#define IS_TRUE						3
+#define IS_LONG						4
+#define IS_DOUBLE					5
+#define IS_STRING					6
+#define IS_ARRAY					7
+#define IS_OBJECT					8
+#define IS_RESOURCE					9
+#define IS_REFERENCE				10
+
+/* constant expressions */
+#define IS_CONSTANT					11
+#define IS_CONSTANT_AST				12
+
+/* fake types */
+#define _IS_BOOL					13
+#define IS_CALLABLE					14
+
+/* internal types */
+#define IS_INDIRECT             	15
+#define IS_PTR						17
+
+.........
+
+#define Z_DVAL(zval)				(zval).value.dval
+#define Z_DVAL_P(zval_p)			Z_DVAL(*(zval_p))
+
+#define Z_STR(zval)					(zval).value.str
+#define Z_STR_P(zval_p)				Z_STR(*(zval_p))
+
+#define Z_STRVAL(zval)				ZSTR_VAL(Z_STR(zval))
+#define Z_STRVAL_P(zval_p)			Z_STRVAL(*(zval_p))
+
+#define Z_STRLEN(zval)				ZSTR_LEN(Z_STR(zval))
+#define Z_STRLEN_P(zval_p)			Z_STRLEN(*(zval_p))
+
+#define Z_STRHASH(zval)				ZSTR_HASH(Z_STR(zval))
+#define Z_STRHASH_P(zval_p)			Z_STRHASH(*(zval_p))
+
+#define Z_ARR(zval)					(zval).value.arr
+#define Z_ARR_P(zval_p)				Z_ARR(*(zval_p))
+
+#define Z_ARRVAL(zval)				Z_ARR(zval)
+#define Z_ARRVAL_P(zval_p)			Z_ARRVAL(*(zval_p))
+
+#define Z_OBJ(zval)					(zval).value.obj
+#define Z_OBJ_P(zval_p)				Z_OBJ(*(zval_p))
+```
+
+### 常量变量的定义及修改宏
+
+```c
+/*Zend/zend_API.h*/
+ZEND_API int zend_declare_property_ex(zend_class_entry *ce, zend_string *name, zval *property, int access_type, zend_string *doc_comment);
+ZEND_API int zend_declare_property(zend_class_entry *ce, const char *name, size_t name_length, zval *property, int access_type);
+ZEND_API int zend_declare_property_null(zend_class_entry *ce, const char *name, size_t name_length, int access_type);
+ZEND_API int zend_declare_property_bool(zend_class_entry *ce, const char *name, size_t name_length, zend_long value, int access_type);
+ZEND_API int zend_declare_property_long(zend_class_entry *ce, const char *name, size_t name_length, zend_long value, int access_type);
+ZEND_API int zend_declare_property_double(zend_class_entry *ce, const char *name, size_t name_length, double value, int access_type);
+ZEND_API int zend_declare_property_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value, int access_type);
+ZEND_API int zend_declare_property_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_len, int access_type);
+
+ZEND_API int zend_declare_class_constant(zend_class_entry *ce, const char *name, size_t name_length, zval *value);
+ZEND_API int zend_declare_class_constant_null(zend_class_entry *ce, const char *name, size_t name_length);
+ZEND_API int zend_declare_class_constant_long(zend_class_entry *ce, const char *name, size_t name_length, zend_long value);
+ZEND_API int zend_declare_class_constant_bool(zend_class_entry *ce, const char *name, size_t name_length, zend_bool value);
+ZEND_API int zend_declare_class_constant_double(zend_class_entry *ce, const char *name, size_t name_length, double value);
+ZEND_API int zend_declare_class_constant_stringl(zend_class_entry *ce, const char *name, size_t name_length, const char *value, size_t value_length);
+ZEND_API int zend_declare_class_constant_string(zend_class_entry *ce, const char *name, size_t name_length, const char *value);
+
+ZEND_API int zend_update_class_constants(zend_class_entry *class_type);
+
+ZEND_API void zend_update_property_ex(zend_class_entry *scope, zval *object, zend_string *name, zval *value);
+ZEND_API void zend_update_property(zend_class_entry *scope, zval *object, const char *name, size_t name_length, zval *value);
+ZEND_API void zend_update_property_null(zend_class_entry *scope, zval *object, const char *name, size_t name_length);
+ZEND_API void zend_update_property_bool(zend_class_entry *scope, zval *object, const char *name, size_t name_length, zend_long value);
+ZEND_API void zend_update_property_long(zend_class_entry *scope, zval *object, const char *name, size_t name_length, zend_long value);
+ZEND_API void zend_update_property_double(zend_class_entry *scope, zval *object, const char *name, size_t name_length, double value);
+ZEND_API void zend_update_property_str(zend_class_entry *scope, zval *object, const char *name, size_t name_length, zend_string *value);
+ZEND_API void zend_update_property_string(zend_class_entry *scope, zval *object, const char *name, size_t name_length, const char *value);
+ZEND_API void zend_update_property_stringl(zend_class_entry *scope, zval *object, const char *name, size_t name_length, const char *value, size_t value_length);
+
+ZEND_API int zend_update_static_property(zend_class_entry *scope, const char *name, size_t name_length, zval *value);
+ZEND_API int zend_update_static_property_null(zend_class_entry *scope, const char *name, size_t name_length);
+ZEND_API int zend_update_static_property_bool(zend_class_entry *scope, const char *name, size_t name_length, zend_long value);
+ZEND_API int zend_update_static_property_long(zend_class_entry *scope, const char *name, size_t name_length, zend_long value);
+ZEND_API int zend_update_static_property_double(zend_class_entry *scope, const char *name, size_t name_length, double value);
+ZEND_API int zend_update_static_property_string(zend_class_entry *scope, const char *name, size_t name_length, const char *value);
+ZEND_API int zend_update_static_property_stringl(zend_class_entry *scope, const char *name, size_t name_length, const char *value, size_t value_length);
+
+ZEND_API zval *zend_read_property(zend_class_entry *scope, zval *object, const char *name, size_t name_length, zend_bool silent, zval *rv);
+
+ZEND_API zval *zend_read_static_property(zend_class_entry *scope, const char *name, size_t name_length, zend_bool silent);
+```
+
+
+

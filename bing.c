@@ -87,6 +87,7 @@ static void php_bing_init_globals(zend_bing_globals *bing_globals)
 PHP_MINIT_FUNCTION(bing)
 {
 //	REGISTER_INI_ENTRIES();
+    //添加bing_service模块
     ZEND_MODULE_STARTUP_N(bing_service)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
