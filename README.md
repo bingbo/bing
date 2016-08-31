@@ -1,6 +1,8 @@
 # bing
 this is a demo about php extension development
 
+## 该扩展DEMO实现了以下php代码的功能
+
 ```php
 /**
  * 定义了bing_version()方法获取bing.so的版本号
