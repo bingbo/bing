@@ -111,6 +111,24 @@ array(1) {
 
 > 扩展开发的API基本上在Zend/zend_API.h里有定义
 
+### 参数类型
+
+```c
+type_spec是格式化字符串，其常见的含义如下：
+参数   代表着的类型
+b   Boolean
+l   Integer 整型
+d   Floating point 浮点型
+s   String 字符串
+r   Resource 资源
+a   Array 数组
+o   Object instance 对象
+O   Object instance of a specified type 特定类型的对象
+z   Non-specific zval 任意类型～
+Z   zval**类型
+f   表示函数、方法名称，PHP5.1里貌似木有... ...
+```
+
 ### 方法或类修饰符
 
 ```c
