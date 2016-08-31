@@ -383,5 +383,88 @@ ZEND_API zval *zend_read_property(zend_class_entry *scope, zval *object, const c
 ZEND_API zval *zend_read_static_property(zend_class_entry *scope, const char *name, size_t name_length, zend_bool silent);
 ```
 
+### 工具类函数宏
+
+```c
+/*在Zend/zend_portability.h里*/
+#ifdef ZTS
+# define ZTS_V 1
+#else
+# define ZTS_V 0
+#endif
+
+#ifndef LONG_MAX
+# define LONG_MAX 2147483647L
+#endif
+
+#ifndef LONG_MIN
+# define LONG_MIN (- LONG_MAX - 1)
+#endif
+
+#define MAX_LENGTH_OF_DOUBLE 32
+
+#undef MIN
+#undef MAX
+#define MAX(a, b)  (((a)>(b))?(a):(b))
+#define MIN(a, b)  (((a)<(b))?(a):(b))
+#define ZEND_STRL(str)		(str), (sizeof(str)-1)
+#define ZEND_STRS(str)		(str), (sizeof(str))
+#define ZEND_NORMALIZE_BOOL(n)			\
+	((n) ? (((n)>0) ? 1 : -1) : 0)
+#define ZEND_TRUTH(x)		((x) ? 1 : 0)
+#define ZEND_LOG_XOR(a, b)		(ZEND_TRUTH(a) ^ ZEND_TRUTH(b))
+
+#define ZEND_MAX_RESERVED_RESOURCES	4
+
+/* excpt.h on Digital Unix 4.0 defines function_table */
+#undef function_table
+
+#ifdef ZEND_WIN32
+#define ZEND_SECURE_ZERO(var, size) RtlSecureZeroMemory((var), (size))
+#else
+#define ZEND_SECURE_ZERO(var, size) memset((var), 0, (size))
+#endif
+
+/* This check should only be used on network socket, not file descriptors */
+#ifdef ZEND_WIN32
+#define ZEND_VALID_SOCKET(sock) (INVALID_SOCKET != (sock))
+#else
+#define ZEND_VALID_SOCKET(sock) ((sock) >= 0)
+#endif
+
+#endif
+```
+
+### HashTable数组的操作宏
+
+```c
+/*在Zend/zend_hash.h里*/
+#define zend_hash_init(ht, nSize, pHashFunction, pDestructor, persistent)						_zend_hash_init((ht), (nSize), (pDestructor), (persistent) ZEND_FILE_LINE_CC)
+#define zend_hash_init_ex(ht, nSize, pHashFunction, pDestructor, persistent, bApplyProtection)		_zend_hash_init_ex((ht), (nSize), (pDestructor), (persistent), (bApplyProtection) ZEND_FILE_LINE_CC)
+.......
+#define zend_hash_update(ht, key, pData) \
+		_zend_hash_update(ht, key, pData ZEND_FILE_LINE_CC)
+#define zend_hash_update_ind(ht, key, pData) \
+		_zend_hash_update_ind(ht, key, pData ZEND_FILE_LINE_CC)
+#define zend_hash_add(ht, key, pData) \
+		_zend_hash_add(ht, key, pData ZEND_FILE_LINE_CC)
+#define zend_hash_add_new(ht, key, pData) \
+		_zend_hash_add_new(ht, key, pData ZEND_FILE_LINE_CC)
+......
+#define zend_hash_merge(target, source, pCopyConstructor, overwrite)					\
+	_zend_hash_merge(target, source, pCopyConstructor, overwrite ZEND_FILE_LINE_CC)
+
+#define zend_hash_sort(ht, compare_func, renumber) \
+	zend_hash_sort_ex(ht, zend_sort, compare_func, renumber)
+
+#define zend_hash_num_elements(ht) \
+	(ht)->nNumOfElements
+
+#define zend_hash_next_free_element(ht) \
+	(ht)->nNextFreeElement
+.....
+```
+
+
 
 

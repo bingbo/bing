@@ -52,9 +52,14 @@ PHP_METHOD(bing_service_parent, __construct)
 //实现接口的函数
 PHP_METHOD(bing_service_parent, execute){
     php_printf("这是实现接口的execute函数!!\n");
-    zval *this_zval;
+    zval *this_zval, *result_vars;
     this_zval = getThis();
     zend_call_method_with_0_params(this_zval,bing_service_ce,NULL,"process",NULL);
+    result_vars = zend_read_property(bing_service_parent_ce, getThis(), ZEND_STRL(BING_SERVICE_PROPERTY_NAME_RESULT), 1, NULL);
+    if(result_vars){
+        RETURN_ZVAL(result_vars, 1, 0);
+    }
+    RETURN_NULL();
 }
 
 //bing_service的所有方法
@@ -95,6 +100,8 @@ PHP_MINIT_FUNCTION(bing_service)
     INIT_CLASS_ENTRY(i_ce, "Bing_Service_Interface", bing_service_interface_functions);
     //注册接口
     bing_service_interface_ce = zend_register_internal_interface(&i_ce TSRMLS_CC);
+    //给接口定义常量AUTHOR并赋值为ibingbo
+    zend_declare_class_constant_string(bing_service_interface_ce, "AUTHOR", strlen("AUTHOR"), "ibingbo");
     /***********************注册Bing_Service_Interface接口**********************/
 
     /***********************注册Bing_Service_Abstract抽象类**********************/
@@ -104,6 +111,11 @@ PHP_MINIT_FUNCTION(bing_service)
     zend_class_implements(bing_service_parent_ce TSRMLS_CC, 1, bing_service_interface_ce);
     //用abstract显式声明为抽象类
     bing_service_parent_ce->ce_flags |= ZEND_ACC_EXPLICIT_ABSTRACT_CLASS;
+    //定义公有变量version并赋值为1.11
+    zend_declare_property_double(bing_service_parent_ce, "version", strlen("version"), 1.11, ZEND_ACC_PUBLIC TSRMLS_CC);
+    //定义参数及结果属性其类型为protected
+    zend_declare_property_null(bing_service_parent_ce, ZEND_STRL(BING_SERVICE_PROPERTY_NAME_PARAMS), ZEND_ACC_PROTECTED);
+    zend_declare_property_null(bing_service_parent_ce, ZEND_STRL(BING_SERVICE_PROPERTY_NAME_RESULT), ZEND_ACC_PROTECTED);
     /***********************注册Bing_Service_Abstract抽象类**********************/
 
     /***********************注册Bing_Service类**********************/
