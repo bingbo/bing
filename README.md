@@ -1,6 +1,17 @@
 # bing
 this is a demo about php extension development
 
+## 编译安装
+
+```bash
+phpize
+./configure
+make
+##配置php.ini加入
+[bing]
+extension = "xxx/xxx/bing.so"
+```
+
 ## 该扩展DEMO实现了以下php代码的功能
 
 ```php
