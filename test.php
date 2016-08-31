@@ -1,13 +1,17 @@
 <?php
 dl('bing.so');
 
-echo bing_version() . "\n";
-echo Bing_Service::AUTHOR . "\n";
-
-$obj = new Bing_Service();
-$obj->getDoc();
-$res = $obj->execute();
-var_dump($res);
+$p = new Person(array('name'=>'bill'));
+var_dump($p->saying('error'));
+var_dump($p->saying());
+var_dump($p->doing());
+//echo bing_version() . "\n";
+//echo Bing_Service::AUTHOR . "\n";
+//
+//$obj = new Bing_Service();
+//$obj->getDoc();
+//$res = $obj->execute();
+//var_dump($res);
 
 ///**
 // * 定义了bing_version()方法获取bing.so的版本号

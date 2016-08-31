@@ -27,12 +27,20 @@
 #include "Zend/zend_interfaces.h" /* for zend_call_method_with_* */
 #include "bing_service.h"
 
+/*******************定义函数形式参数**********************/
+//定义execute函数的params参数,必传
+ZEND_BEGIN_ARG_INFO_EX(bing_service_execute_arginfo, 0, 0, 1)
+    //是传地引用passby_ref
+    ZEND_ARG_INFO(1, params)
+ZEND_END_ARG_INFO()
+/*******************定义函数形式参数**********************/
+
 zend_class_entry *bing_service_ce, *bing_service_parent_ce, *bing_service_interface_ce;
 
 /********************service interface接口定义*******************************/
 //bing_service_interface接口函数
 zend_function_entry bing_service_interface_functions[] = {
-    PHP_ABSTRACT_ME(bing_service_interface, execute, NULL)
+    PHP_ABSTRACT_ME(bing_service_interface, execute, bing_service_execute_arginfo)
     PHP_FE_END
 };
 
@@ -51,8 +59,19 @@ PHP_METHOD(bing_service_parent, __construct)
 }
 //实现接口的函数
 PHP_METHOD(bing_service_parent, execute){
+    zval *this_zval, *result_vars, *params_vars;
+    zval *params_array = NULL;
+    if(zend_parse_parameters(ZEND_NUM_ARGS(),"z", &params_array) == FAILURE){
+        return;
+    }else{
+        if(Z_TYPE_P(params_array) == IS_ARRAY){
+            params_vars = zend_read_property(bing_service_parent_ce, getThis(), ZEND_STRL(BING_SERVICE_PROPERTY_NAME_PARAMS), 1, NULL);
+            zend_hash_copy(Z_ARRVAL_P(params_vars), Z_ARRVAL_P(params_array), (copy_ctor_func_t) zval_add_ref);
+            zend_update_property(bing_service_parent_ce, getThis(), ZEND_STRL(BING_SERVICE_PROPERTY_NAME_PARAMS), params_vars);
+        }
+    }
     php_printf("这是实现接口的execute函数!!\n");
-    zval *this_zval, *result_vars;
+
     this_zval = getThis();
     zend_call_method_with_0_params(this_zval,bing_service_ce,NULL,"process",NULL);
     result_vars = zend_read_property(bing_service_parent_ce, getThis(), ZEND_STRL(BING_SERVICE_PROPERTY_NAME_RESULT), 1, NULL);
@@ -66,7 +85,7 @@ PHP_METHOD(bing_service_parent, execute){
 zend_function_entry bing_service_parent_functions[] = {
     PHP_ME(bing_service_parent, getDoc, NULL, ZEND_ACC_PUBLIC)
     PHP_ME(bing_service_parent, __construct, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_CTOR)
-    PHP_ME(bing_service_parent, execute, NULL, ZEND_ACC_PUBLIC)
+    PHP_ME(bing_service_parent, execute, bing_service_execute_arginfo, ZEND_ACC_PUBLIC)
     PHP_ABSTRACT_ME(bing_service_parent, process, NULL)
 	PHP_FE_END	/* Must be the last line in bing_functions[] */
 };

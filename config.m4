@@ -21,5 +21,5 @@ dnl 如果以./configure --enable-bing的形式编译添加扩展，则$PHP_BING
 if test "$PHP_BING" != "no"; then
   PHP_SUBST(BING_SHARED_LIBADD)
 
-  PHP_NEW_EXTENSION(bing, bing.c bing_service.c,$ext_shared, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+  PHP_NEW_EXTENSION(bing, bing.c bing_service.c bing_person.c,$ext_shared, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 fi

@@ -89,6 +89,7 @@ PHP_MINIT_FUNCTION(bing)
 //	REGISTER_INI_ENTRIES();
     //添加bing_service模块
     ZEND_MODULE_STARTUP_N(bing_service)(INIT_FUNC_ARGS_PASSTHRU);
+    ZEND_MODULE_STARTUP_N(bing_person)(INIT_FUNC_ARGS_PASSTHRU);
 	return SUCCESS;
 }
 /* }}} */

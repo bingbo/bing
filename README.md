@@ -79,6 +79,14 @@ echo bing_version() . "\n";
 $obj = new Bing_Service();
 $obj->getDoc();
 $obj->execute();
+
+
+
+
+$p = new Person(array('name'=>'bill'));
+var_dump($p->saying('error'));
+var_dump($p->saying());
+var_dump($p->doing());
 ```
 
 结果如下：
@@ -89,6 +97,14 @@ $obj->execute();
 这是service's getDoc方法!!
 这是实现接口的execute函数!!
 这是service's process方法!!
+
+bool(false)
+array(0) {
+}
+array(1) {
+  'name' =>
+    string(4) "bill"
+}
 ```
 
 ## PHP中的宏定义
