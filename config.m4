@@ -23,3 +23,10 @@ if test "$PHP_BING" != "no"; then
 
   PHP_NEW_EXTENSION(bing, bing.c bing_service.c bing_person.c,$ext_shared, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 fi
+
+if test -z "$PHP_DEBUG"; then
+    AC_ARG_ENABLE(debug,
+        [--enable-debug  compile with debugging system],
+        [PHP_DEBUG=$enableval], [PHP_DEBUG=no]
+    )
+fi
